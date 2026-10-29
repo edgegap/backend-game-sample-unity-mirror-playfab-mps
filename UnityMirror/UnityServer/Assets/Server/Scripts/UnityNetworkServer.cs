@@ -4,14 +4,10 @@
     using System.Collections.Generic;
     using UnityEngine;
     using Mirror;
-    using UnityEngine.Events;
 
     public class UnityNetworkServer : NetworkManager
     {
         public static UnityNetworkServer Instance { get; private set; }
-
-        public PlayerEvent OnPlayerAdded = new PlayerEvent();
-        public PlayerEvent OnPlayerRemoved = new PlayerEvent();
 
         public int MaxConnections = 100;
         public int Port = 7777; // the Edgegap app version's "gameport" (TCP)
@@ -23,8 +19,6 @@
         }
         private List<UnityNetworkConnection> _connections = new List<UnityNetworkConnection>();
 
-        public class PlayerEvent : UnityEvent<string> { }
-
         // Use this for initialization
         public override void Awake()
         {
@@ -32,7 +26,6 @@
             Instance = this;
             // EdgegapServer starts the server once it is set up, not Mirror's headless auto-start.
             autoStartServerBuild = false;
-            NetworkServer.RegisterHandler<ReceiveAuthenticateMessage>(OnReceiveAuthenticate);
         }
 
         public void StartListen()
@@ -49,17 +42,6 @@
         {
             base.OnApplicationQuit();
             NetworkServer.Shutdown();
-        }
-
-        private void OnReceiveAuthenticate(NetworkConnection nconn, ReceiveAuthenticateMessage message)
-        {
-            var conn = _connections.Find(c => c.ConnectionId == nconn.connectionId);
-            if(conn != null)
-            {
-                conn.PlayFabId = message.PlayFabId;
-                conn.IsAuthenticated = true;
-                OnPlayerAdded.Invoke(message.PlayFabId);
-            }
         }
 
         public override void OnServerConnect(NetworkConnection conn)
@@ -92,21 +74,13 @@
 
             var uconn = _connections.Find(c => c.ConnectionId == conn.connectionId);
             if (uconn != null)
-            {
-                if (!string.IsNullOrEmpty(uconn.PlayFabId))
-                {
-                    OnPlayerRemoved.Invoke(uconn.PlayFabId);
-                }
                 _connections.Remove(uconn);
-            }
         }
     }
 
     [Serializable]
     public class UnityNetworkConnection
     {
-        public bool IsAuthenticated;
-        public string PlayFabId;
         public string LobbyId;
         public int ConnectionId;
         public NetworkConnection Connection;
@@ -114,14 +88,8 @@
 
     public class CustomGameServerMessageTypes
     {
-        public const short ReceiveAuthenticate = 900;
         public const short ShutdownMessage = 901;
         public const short MaintenanceMessage = 902;
-    }
-
-    public struct ReceiveAuthenticateMessage : NetworkMessage
-    {
-        public string PlayFabId;
     }
 
     public struct ShutdownMessage : NetworkMessage {}
