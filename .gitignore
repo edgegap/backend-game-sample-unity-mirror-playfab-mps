@@ -119,6 +119,10 @@ publish/
 [Pp]ackages/
 !UnityMpsTelemetry/UnityServer/Packages/
 !UnityMpsTelemetry/UnityServer/Packages/**
+!UnityMirror/UnityServer/Packages/
+!UnityMirror/UnityServer/Packages/**
+!UnityMirror/UnityClient/Packages/
+!UnityMirror/UnityClient/Packages/**
 
 # Windows Azure Build Output
 csx
