@@ -1,0 +1,3 @@
+# The Edgegap plugin builds the image with the Unity project root as context: send only the server build to Docker.
+*
+!Builds/EdgegapServer/**
