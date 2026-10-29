@@ -52,6 +52,12 @@ UnityMirror/UnityClient/Builds/Client/win64/Client.exe -server <host>:<port>
 
 Without `-server`, the client uses the address and port set on its `NetworkManager` in the Inspector. Quit the clients: the server stops its deployment 30 s later.
 
+### Tested
+
+On 2026-10-29 with Unity 2021.3.45f2 and plugin 3.2.1: `EdgegapAllocatorSample deploy` started the server in Toronto within seconds, two Windows clients connected over TCP (`2 player(s) connected`), and after they quit the server stopped its own deployment. Also run in Docker locally: same result, and `docker stop` sent the connected client a shutdown before the server exited.
+
+Plugin 3.2.1's Dockerfile runs `env` first, so the deployment logs show the injected variables, including the self-stop token. Fixed in edgegap/buildtool-unity-plugin#62.
+
 ### Changes from the MPS version
 
 - `AgentListener.cs` → `EdgegapServer.cs` (same `.meta`, so the scene needs no edit), and `Assets/PlayFabSdk` removed.
