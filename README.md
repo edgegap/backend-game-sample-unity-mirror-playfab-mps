@@ -1,5 +1,11 @@
 # MpsSamples
 
+> **Edgegap fork.** This fork adds [Edgegap](https://edgegap.com) versions of two samples, to run the same game servers with Edgegap as the orchestrator (no matchmaker yet):
+> - [UnityMirror](UnityMirror/README.md#run-it-on-edgegap-this-fork): the Unity Mirror server without the GSDK, built and deployed with the Edgegap Unity plugin.
+> - [EdgegapAllocatorSample](EdgegapAllocatorSample/README.md): the counterpart of MpsAllocatorSample, starting and stopping servers through the Edgegap API.
+>
+> The other samples are unchanged from [PlayFab/MpsSamples](https://github.com/PlayFab/MpsSamples).
+
 This repository contains samples that show how to use Azure PlayFab Multiplayer Servers Gameserver SDK (GSDK) as well as additional resources.
 
 ## Wrapping GSDK
