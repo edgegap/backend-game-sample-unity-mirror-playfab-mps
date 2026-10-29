@@ -29,7 +29,25 @@ public class NewNetworkManager : NetworkManager
     public override void Start()
     {
         base.Start();
+
+        // Edgegap: the server's address comes from the deployment (dashboard, or the EdgegapAllocatorSample output).
+        // Pass it as -server <host:port>; without it the client uses the networkAddress and port set in the Inspector.
+        string server = GetArg("-server");
+        if (!string.IsNullOrEmpty(server))
+        {
+            int colon = server.LastIndexOf(':');
+            networkAddress = server.Substring(0, colon);
+            GetComponent<TelepathyTransport>().port = ushort.Parse(server.Substring(colon + 1));
+        }
+        Debug.Log($"Connecting to {networkAddress}:{GetComponent<TelepathyTransport>().port}");
         this.StartClient();
+    }
+
+    private static string GetArg(string name)
+    {
+        string[] args = Environment.GetCommandLineArgs();
+        int i = Array.IndexOf(args, name);
+        return i >= 0 && i + 1 < args.Length ? args[i + 1] : null;
     }
 
 

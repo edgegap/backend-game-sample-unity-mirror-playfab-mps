@@ -14,7 +14,7 @@
         public PlayerEvent OnPlayerRemoved = new PlayerEvent();
 
         public int MaxConnections = 100;
-        public int Port = 7777; // overwritten by the code in AgentListener.cs
+        public int Port = 7777; // the Edgegap app version's "gameport" (TCP)
 
         public List<UnityNetworkConnection> Connections
         {
@@ -30,13 +30,19 @@
         {
             base.Awake();
             Instance = this;
+            // EdgegapServer starts the server once it is set up, not Mirror's headless auto-start.
+            autoStartServerBuild = false;
             NetworkServer.RegisterHandler<ReceiveAuthenticateMessage>(OnReceiveAuthenticate);
         }
 
         public void StartListen()
         {
             this.GetComponent<TelepathyTransport>().port = (ushort)Port;
-            NetworkServer.Listen(MaxConnections);
+            maxConnections = MaxConnections;
+            // Through the NetworkManager: NetworkServer.Listen alone skips its connect and ready handlers,
+            // so clients would be dropped as unauthenticated.
+            if (!NetworkServer.active)
+                StartServer();
         }
 
         public override void OnApplicationQuit()
@@ -68,7 +74,7 @@
                 {
                     Connection = conn,
                     ConnectionId = conn.connectionId,
-                    LobbyId = PlayFabMultiplayerAgentAPI.SessionConfig.SessionId
+                    LobbyId = Environment.GetEnvironmentVariable("ARBITRIUM_REQUEST_ID") // the Edgegap deployment
                 });
             }
         }
