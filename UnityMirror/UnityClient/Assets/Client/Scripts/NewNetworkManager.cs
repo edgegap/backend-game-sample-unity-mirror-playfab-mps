@@ -118,14 +118,8 @@ public class NewNetworkManager : NetworkManager
 
 public class CustomGameServerMessageTypes
 {
-    public const short ReceiveAuthenticate = 900;
     public const short ShutdownMessage = 901;
     public const short MaintenanceMessage = 902;
-}
-
-public struct ReceiveAuthenticateMessage : NetworkMessage
-{
-    public string PlayFabId;
 }
 
 public struct ShutdownMessage : NetworkMessage { }
