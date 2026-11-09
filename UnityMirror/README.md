@@ -54,7 +54,7 @@ Without `-server`, the client uses the address and port set on its `NetworkManag
 
 ### Tested
 
-On 2026-10-29 with Unity 2021.3.45f2 and plugin 3.2.1: `EdgegapAllocatorSample deploy` started the server in Toronto within seconds, two Windows clients connected over TCP (`2 player(s) connected`), and after they quit the server stopped its own deployment. Also run in Docker locally: same result, and `docker stop` sent the connected client a shutdown before the server exited.
+On 2026-10-29 with Unity 2021.3.45f2 and plugin 3.2.1: `EdgegapAllocatorSample deploy` started the server in Toronto within seconds, two Windows clients connected over TCP (`2 player(s) connected`), and after they quit the server stopped its own deployment. Also run in Docker locally: same result, and `docker stop` sent the connected client a shutdown before the server exited. The project now pins plugin 3.2.2, which differs from 3.2.1 only in its Dockerfile (no `env` dump, server started with `exec`); not re-run since.
 
 Plugin 3.2.1's Dockerfile ran `env` first, so the deployment logs showed the injected variables, including the self-stop token. Fixed in plugin 3.2.2 (edgegap/buildtool-unity-plugin#62), which this project now pins; rebuild the image if yours was built with 3.2.1.
 
