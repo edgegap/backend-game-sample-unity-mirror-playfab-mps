@@ -14,7 +14,7 @@ This fork runs the same Unity Mirror server on [Edgegap](https://edgegap.com) in
 | RequestMultiplayerServer | `POST /v2/deployments` ([EdgegapAllocatorSample](../EdgegapAllocatorSample/README.md)) |
 | Server runs until MPS shuts it down | The server stops its own deployment 120 s after start if nobody joins, or 30 s after the last player leaves (`ARBITRIUM_DELETE_URL`). Call `SelfStop()` when a match ends. |
 
-Both projects are on Unity 2021.3.45f2. The server is built and containerized with the [Edgegap Unity plugin](https://github.com/edgegap/buildtool-unity-plugin) (`com.edgegap.unity-servers-plugin`, pinned to `#3.2.1` in `UnityServer/Packages/manifest.json`), so the project has no Dockerfile of its own.
+Both projects are on Unity 2021.3.45f2. The server is built and containerized with the [Edgegap Unity plugin](https://github.com/edgegap/buildtool-unity-plugin) (`com.edgegap.unity-servers-plugin`, pinned to `#3.2.2` in `UnityServer/Packages/manifest.json`), so the project has no Dockerfile of its own.
 
 ### 1. Build and upload the server
 
@@ -56,7 +56,7 @@ Without `-server`, the client uses the address and port set on its `NetworkManag
 
 On 2026-10-29 with Unity 2021.3.45f2 and plugin 3.2.1: `EdgegapAllocatorSample deploy` started the server in Toronto within seconds, two Windows clients connected over TCP (`2 player(s) connected`), and after they quit the server stopped its own deployment. Also run in Docker locally: same result, and `docker stop` sent the connected client a shutdown before the server exited.
 
-Plugin 3.2.1's Dockerfile runs `env` first, so the deployment logs show the injected variables, including the self-stop token. Fixed in edgegap/buildtool-unity-plugin#62.
+Plugin 3.2.1's Dockerfile ran `env` first, so the deployment logs showed the injected variables, including the self-stop token. Fixed in plugin 3.2.2 (edgegap/buildtool-unity-plugin#62), which this project now pins; rebuild the image if yours was built with 3.2.1.
 
 ### Changes from the MPS version
 
